@@ -16,8 +16,8 @@
     <Grid x:Name="Root" ClipToBounds="True">
         <Border x:Name="Panel"
                 VerticalAlignment="Top"
-                CornerRadius="0,0,18,18"
-                BorderThickness="1,0,1,1"
+                ClipToBounds="True"
+                BorderThickness="0,0,0,1"
                 Padding="0,0,0,12">
             <Border.RenderTransform>
                 <TranslateTransform x:Name="Slide" />
