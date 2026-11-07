@@ -113,3 +113,6 @@ Goal: a Windows-native counterpart of every user-facing feature in ClipBoardLine
 ## 0.1.5 — Edge to edge
 - [x] The shelves no longer nudge one pixel sideways while sliding down (the cached picture now starts on a whole pixel)
 - [x] The panel spans the screen edge to edge, without rounded corners or side borders leaving gaps
+
+## 0.1.6 — No sideways jump
+- [x] The slide picture is clipped inside the panel, so it starts on a whole pixel: no gap on the right and no jump when the slide ends
