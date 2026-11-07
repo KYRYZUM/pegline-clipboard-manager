@@ -1,4 +1,4 @@
-<Window x:Class="Pegline.App.Shelves.ShelfWindow"
+﻿<Window x:Class="Pegline.App.Shelves.ShelfWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Pegline"
@@ -16,13 +16,14 @@
     <Grid x:Name="Root" ClipToBounds="True">
         <Border x:Name="Panel"
                 VerticalAlignment="Top"
-                ClipToBounds="True"
                 BorderThickness="0,0,0,1"
                 Padding="0,0,0,12">
             <Border.RenderTransform>
                 <TranslateTransform x:Name="Slide" />
             </Border.RenderTransform>
-            <Grid>
+            <!-- Clipped so nothing inside (rope shadows) reaches past the panel: the picture cached for the slide then
+                 starts on a whole pixel and does not jump sideways when it is snapped to the screen. -->
+            <Grid ClipToBounds="True">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
