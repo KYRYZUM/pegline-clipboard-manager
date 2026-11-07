@@ -10,7 +10,7 @@ Pegline pegs your images, texts and links onto three lines that slide down from 
 
 ## Status
 
-`0.1.4`. What is finished is tracked in [ROADMAP.md](ROADMAP.md).
+`0.1.5`. What is finished is tracked in [ROADMAP.md](ROADMAP.md).
 
 ## Install and update
 

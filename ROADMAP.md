@@ -109,3 +109,7 @@ Goal: a Windows-native counterpart of every user-facing feature in ClipBoardLine
 - [x] The slide starts once the panel's first frame is drawn and moves the panel as one cached picture, so ropes, pegs and card shadows are not redrawn for every frame
 - [x] The window is resized only when its size really changes, never in the middle of a slide
 - [x] Repository renamed to `pegline-clipboard-manager`; update checks and model downloads use the new address
+
+## 0.1.5 — Edge to edge
+- [x] The shelves no longer nudge one pixel sideways while sliding down (the cached picture now starts on a whole pixel)
+- [x] The panel spans the screen edge to edge, without rounded corners or side borders leaving gaps
