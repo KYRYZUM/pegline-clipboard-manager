@@ -116,3 +116,7 @@ Goal: a Windows-native counterpart of every user-facing feature in ClipBoardLine
 
 ## 0.1.6 — No sideways jump
 - [x] The slide picture is clipped inside the panel, so it starts on a whole pixel: no gap on the right and no jump when the slide ends
+
+## 0.1.7 — Soft slide
+- [x] The shelf window is drawn by the screen compositor straight from the graphics card instead of as a layered window, so slide frames are no longer copied back to the processor (the occasional hitch)
+- [x] The slide runs at the monitor's refresh rate instead of 60 frames a second
