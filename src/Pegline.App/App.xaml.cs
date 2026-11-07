@@ -307,6 +307,16 @@ public partial class App : Application
             DevSnapshot.Capture(_settingsWindow, page, pageShot, () => Shutdown());
             return;
         }
+        if (e.Args is ["--slide-demo", var demoOutput])
+        {
+            // Development aid: the same, but on the monitor under the pointer, for a person to watch.
+            _shelves.MeasureSlides(6, report =>
+            {
+                File.WriteAllText(demoOutput, report);
+                Shutdown();
+            }, onScreen: true);
+            return;
+        }
         if (e.Args is ["--slide-timing", var slideOutput])
         {
             // Development aid: slides the shelves down off-screen a few times and writes how evenly the frames came.

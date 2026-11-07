@@ -121,6 +121,10 @@ public partial class ShelfWindow : Window
         {
             var handle = new WindowInteropHelper(this).Handle;
             Win32.SetWindowLong(handle, Win32.GWL_EXSTYLE, Win32.GetWindowLong(handle, Win32.GWL_EXSTYLE) | Win32.WS_EX_TOOLWINDOW);
+            // See-through without a layered window: the screen compositor shows the window straight from the graphics
+            // card, so a slide frame is not copied back to the processor first (the hitch layered windows gave).
+            HwndSource.FromHwnd(handle)!.CompositionTarget!.BackgroundColor = Colors.Transparent;
+            Win32.SeeThrough(handle);
         };
         ApplySettings();
     }
@@ -292,6 +296,7 @@ public partial class ShelfWindow : Window
         CloseChildren();
         _nav.Close();
         var animation = new DoubleAnimation(0, -Panel.ActualHeight - 20, TimeSpan.FromMilliseconds(150)) { EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn } };
+        Timeline.SetDesiredFrameRate(animation, SlideFrameRate);
         animation.Completed += (_, _) =>
         {
             Panel.CacheMode = null;
@@ -322,7 +327,8 @@ public partial class ShelfWindow : Window
             if (++waited < 2) return;
             CompositionTarget.Rendering -= Start;
             if (!IsVisible || _hiding) return;
-            var animation = new DoubleAnimation(from, 0, TimeSpan.FromMilliseconds(220)) { EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut } };
+            var animation = new DoubleAnimation(from, 0, TimeSpan.FromMilliseconds(240)) { EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut } };
+            Timeline.SetDesiredFrameRate(animation, SlideFrameRate);
             animation.Completed += (_, _) =>
             {
                 if (!_hiding) Panel.CacheMode = null;
@@ -331,6 +337,9 @@ public partial class ShelfWindow : Window
         }
         CompositionTarget.Rendering += Start;
     }
+
+    /// <summary>Slides step as often as the monitor refreshes (WPF would otherwise stop at 60 frames a second).</summary>
+    private const int SlideFrameRate = 240;
 
     /// <summary>Draws the panel once into a bitmap at screen resolution while it slides; the live panel returns when it stops.</summary>
     private void CacheWhileMoving() =>

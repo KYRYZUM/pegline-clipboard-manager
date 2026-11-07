@@ -121,6 +121,31 @@ internal static class Win32
     [DllImport("shcore.dll")]
     public static extern int GetDpiForMonitor(IntPtr monitor, int type, out uint dpiX, out uint dpiY);
 
+    [StructLayout(LayoutKind.Sequential)]
+    private struct MARGINS { public int Left, Right, Top, Bottom; }
+
+    [DllImport("dwmapi.dll")]
+    private static extern int DwmExtendFrameIntoClientArea(IntPtr hwnd, ref MARGINS margins);
+
+    [DllImport("dwmapi.dll")]
+    private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attribute, ref int value, int size);
+
+    /// <summary>
+    /// Lets the transparent pixels of a normal (not layered) window show what is behind it: no backdrop material, square
+    /// corners, no border.
+    /// </summary>
+    public static void SeeThrough(IntPtr hwnd)
+    {
+        var all = new MARGINS { Left = -1, Right = -1, Top = -1, Bottom = -1 };
+        DwmExtendFrameIntoClientArea(hwnd, ref all);
+        var none = 1; // DWMSBT_NONE
+        DwmSetWindowAttribute(hwnd, 38, ref none, sizeof(int)); // DWMWA_SYSTEMBACKDROP_TYPE
+        var square = 1; // DWMWCP_DONOTROUND
+        DwmSetWindowAttribute(hwnd, 33, ref square, sizeof(int)); // DWMWA_WINDOW_CORNER_PREFERENCE
+        var noBorder = unchecked((int)0xFFFFFFFE); // DWMWA_COLOR_NONE
+        DwmSetWindowAttribute(hwnd, 34, ref noBorder, sizeof(int)); // DWMWA_BORDER_COLOR
+    }
+
     public static readonly IntPtr HWND_TOPMOST = new(-1);
     public const uint SWP_NOACTIVATE = 0x10;
     public const uint SWP_SHOWWINDOW = 0x40;

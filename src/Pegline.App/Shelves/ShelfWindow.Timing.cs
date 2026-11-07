@@ -17,10 +17,10 @@ public partial class ShelfWindow
     /// <summary>Set by the timing run so the shelves open off-screen instead of on the monitor under the pointer.</summary>
     private static Win32.RECT? _debugWorkArea;
 
-    internal void MeasureSlides(int rounds, Action<string> done)
+    internal void MeasureSlides(int rounds, Action<string> done, bool onScreen = false)
     {
         var (real, _) = Win32.MonitorUnderCursor();
-        _debugWorkArea = new Win32.RECT { Left = -32000, Top = -32000, Right = -32000 + (real.Right - real.Left), Bottom = -32000 + (real.Bottom - real.Top) };
+        if (!onScreen) _debugWorkArea = new Win32.RECT { Left = -32000, Top = -32000, Right = -32000 + (real.Right - real.Left), Bottom = -32000 + (real.Bottom - real.Top) };
         var report = new StringBuilder();
         var round = 0;
         // As in the app, the shelves are prepared once while it starts.
@@ -38,6 +38,7 @@ public partial class ShelfWindow
             void Tick(object? sender, EventArgs e) => frames.Add((clock.Elapsed.TotalMilliseconds, Slide.Y));
             CompositionTarget.Rendering += Tick;
             ShowPassive(null, TimeSpan.FromSeconds(30));
+            frames.Clear(); // only the frames after the call: the slide itself
             var blocked = clock.Elapsed.TotalMilliseconds;
             After(900, () =>
             {
